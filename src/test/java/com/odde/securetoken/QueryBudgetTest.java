@@ -65,6 +65,14 @@ public class QueryBudgetTest {
         assertEquals(28.0 + 30.0, queryBudget.query(start, end));
     }
 
+    @Test(expected = InvalidTimeRangeException.class)
+    public void invalid_time_range() {
+        givenQueryBudget();
+        LocalDate start = LocalDate.of(2019, 1, 2);
+        LocalDate end = LocalDate.of(2019, 1, 1);
+        queryBudget.query(start, end);
+    }
+
     private void givenQueryBudget() {
         BudgetRepo budgetRepo = Mockito.mock(BudgetRepo.class);
         when(budgetRepo.findAllBudgets()).thenReturn(budgets);

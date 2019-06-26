@@ -14,7 +14,9 @@ class QueryBudget {
         this.budgets = budgetRepo.findAllBudgets();
     }
 
-    public double query(LocalDate start, LocalDate end) {
+    public double query(LocalDate start, LocalDate end) throws InvalidTimeRangeException {
+        if (start.isAfter(end)) throw new InvalidTimeRangeException();
+
         double result = 0.0;
         LocalDate endOfMonth = start.withDayOfMonth(start.lengthOfMonth());
 
