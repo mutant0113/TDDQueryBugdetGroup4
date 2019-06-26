@@ -21,15 +21,13 @@ class QueryBudget {
         LocalDate endOfMonth = start.withDayOfMonth(start.lengthOfMonth());
 
         while (endOfMonth.isBefore(end)) {
-            int daysBetweenFirstMonth = (int) ChronoUnit.DAYS.between(start, endOfMonth) + 1;
-            result += calBudgets(getBudgetPerMonth(endOfMonth), daysBetweenFirstMonth, endOfMonth.lengthOfMonth());
+            result += calBudgets(start, endOfMonth);
             start = endOfMonth.plusDays(1);
             endOfMonth = endOfMonth.plusMonths(1);
             endOfMonth = endOfMonth.withDayOfMonth(endOfMonth.lengthOfMonth());
         }
         if (start.isBefore(end) || start.isEqual(end)) {
-            int daysBetweenFirstMonth = (int) ChronoUnit.DAYS.between(start, end) + 1;
-            result += calBudgets(getBudgetPerMonth(end), daysBetweenFirstMonth, end.lengthOfMonth());
+            result += calBudgets(start, end);
         }
 
         return result;
@@ -44,8 +42,10 @@ class QueryBudget {
         return 0;
     }
 
-    private double calBudgets(int budgetPerMonth, int daysBetween, int daysPerMonth) {
-        return budgetPerMonth * getRatioPerMonth(daysBetween, daysPerMonth);
+    private double calBudgets(LocalDate start, LocalDate endOfMonth) {
+        int daysBetween = (int) ChronoUnit.DAYS.between(start, endOfMonth) + 1;
+        int budgetPerMonth = getBudgetPerMonth(endOfMonth);
+        return budgetPerMonth * getRatioPerMonth(daysBetween, endOfMonth.lengthOfMonth());
     }
 
     private double getRatioPerMonth(int daysBetween, int daysPerMonth) {
