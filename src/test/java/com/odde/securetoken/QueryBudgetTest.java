@@ -44,6 +44,27 @@ public class QueryBudgetTest {
         assertEquals(31.0 + 28.0, queryBudget.query(start, end));
     }
 
+    @Test
+    public void budget_two_partial_months() {
+        addBudgets(new Budget("2019/1", 31));
+        addBudgets(new Budget("2019/2", 28));
+        givenQueryBudget();
+        LocalDate start = LocalDate.of(2019, 1, 15);
+        LocalDate end = LocalDate.of(2019, 2, 15);
+        assertEquals(15.0 + 17.0, queryBudget.query(start, end));
+    }
+
+    @Test
+    public void budget_three_months_without_budget_in_a_month() {
+        addBudgets(new Budget("2019/2", 28));
+        addBudgets(new Budget("2019/4", 30));
+
+        givenQueryBudget();
+        LocalDate start = LocalDate.of(2019, 2, 1);
+        LocalDate end = LocalDate.of(2019, 4, 30);
+        assertEquals(28.0 + 30.0, queryBudget.query(start, end));
+    }
+
     private void givenQueryBudget() {
         BudgetRepo budgetRepo = Mockito.mock(BudgetRepo.class);
         when(budgetRepo.findAllBudgets()).thenReturn(budgets);

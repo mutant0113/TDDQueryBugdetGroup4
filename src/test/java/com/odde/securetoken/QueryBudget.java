@@ -23,6 +23,7 @@ class QueryBudget {
             result += calBudgets(getBudgetPerMonth(endOfMonth), daysBetweenFirstMonth, endOfMonth.lengthOfMonth());
             start = endOfMonth.plusDays(1);
             endOfMonth = endOfMonth.plusMonths(1);
+            endOfMonth = endOfMonth.withDayOfMonth(endOfMonth.lengthOfMonth());
         }
         if (start.isBefore(end) || start.isEqual(end)) {
             int daysBetweenFirstMonth = (int) ChronoUnit.DAYS.between(start, end) + 1;
